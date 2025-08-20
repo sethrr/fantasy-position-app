@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏈 Adage TechMo Bowl 2025 Draft Order 🏈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Restore football emoji background elements -->
+    <div class="football" style="top: 10%; left: 15%; animation-delay: 0s;">🏈</div>
+    <div class="football" style="top: 25%; left: 85%; animation-delay: 2s;">🏈</div>
+    <div class="football" style="top: 60%; left: 10%; animation-delay: 4s;">🏈</div>
+    <div class="football" style="top: 80%; left: 75%; animation-delay: 6s;">🏈</div>
+    <div class="football" style="top: 35%; left: 90%; animation-delay: 1s;">🏈</div>
+
+    <!-- Logo -->
+    <div class="logo-container">
+        <div class="logo">
+            <img src="techmologo.png" />
+        </div>
+    </div>
+
+    <h1>🏆 Draft Order Dash 2025: Electric Boogaloo 🏆</h1>
+
+    <div id="rounds-input">
+        <div class="champion-banner">
+           REIGNING 2024 CHAMPION: <img src="Russell.jpeg" alt="Russell" class="player-image"> 
+        </div>
+
+        <h2>⚡ Configure Championship Rounds ⚡</h2>
+        <input type="number" id="num-rounds" min="1" max="10" value="5" placeholder="Enter number of rounds (1-10)">
+        <button onclick="startApp()">🏈 BEGIN DRAFT 🏈</button>
+        <p id="rounds-error" class="error" style="display: none;">⚠️ Please enter a number between 1 and 10.</p>
+    </div>
+
+
+    <div id="app" style="display: none;">
+        <div class="champion-banner">
+            REIGNING 2024 CHAMPION: <img src="Russell.jpeg" alt="Russell" class="player-image"> 
+        </div>
+
+        <div id="race-section">
+            <h2>🏈 RACE <span id="race-num">1</span> RESULTS 🏈</h2>
+            <p>📊 Click player names in finishing order (1st to 12th place) 📊</p>
+            <div id="buttons"></div>
+        </div>
+
+        <div id="draft-section" style="display: none;">
+            <!--<h2 id="dps">🏈 DRAFT PICK SELECTION 🏈</h2>-->
+            <p id="pcd">🏆 Players choose draft picks based on total points earned (highest scorer picks first) 🏆</p>
+            <p id="current-chooser"></p>
+            <div id="draft-controls">
+                <select id="draft-pick-select"></select>
+                <button id="confirm-btn" onclick="confirmPick()">✅ CONFIRM SELECTION</button>
+                <button id="reset-btn" onclick="resetApp()">🔄 RESET DRAFT</button>
+            </div>
+            <p id="draft-error" class="error" style="display: none;">❌ Please select a draft pick.</p>
+            <h3 id="assigned-picks-title">📋 DRAFT SELECTIONS</h3>
+            <ul id="assigned-picks"></ul>
+        </div>
+
+        <div id="main-content">
+            <div id="score-table">
+                <h2>📊 RACE SCOREBOARD</h2>
+                <div id="table-container">
+                    <table>
+                        <thead id="table-head"></thead>
+                        <tbody id="score-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="standings">
+                <h2>🏅 DRAFT POSITION</h2>
+                <ol id="standings-list"></ol>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <script src="script.js"></script>
+</body>
+</html>

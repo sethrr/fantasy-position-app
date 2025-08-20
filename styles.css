@@ -1,0 +1,754 @@
+:root {
+    --primary-blue: #1578d0;
+    --secondary-blue: #0d5aa7;
+    --accent-gold: #ffd700;
+    --field-green: #2d8f2d;
+    --dark-blue: #0a4785;
+    --light-blue: #4a9eff;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --success-green: #28a745;
+    --warning-orange: #fd7e14;
+    --error-red: #dc3545;
+    --football-brown: #8b4513;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--dark-blue) 100%);
+    color: var(--white);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Football field background pattern */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient( 0deg, transparent, transparent 48px, rgba(255, 255, 255, 0.05) 48px, rgba(255, 255, 255, 0.05) 52px );
+    z-index: -1;
+    animation: fieldMove 15s linear infinite;
+}
+
+/* Floating football elements */
+.football {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.3;
+    animation: footballFloat 8s ease-in-out infinite;
+}
+
+/* Logo container */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+    animation: logoEnter 1s ease-out;
+}
+
+
+.logo img {
+    max-width: 400px;
+}
+
+
+h1 {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: var(--accent-gold);
+    font-size: clamp(24px, 6vw, 36px);
+    font-weight: 900;
+    text-align: center;
+    margin: 30px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(-30px);
+    animation: titleEnter 1s ease-out 0.5s forwards;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h2, h3 {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: var(--accent-gold);
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: clamp(18px, 4vw, 24px);
+    border-bottom: 2px solid var(--accent-gold);
+    padding-bottom: 10px;
+}
+
+h3 {
+    font-size: clamp(16px, 3vw, 20px);
+}
+
+button {
+    background: linear-gradient(45deg, var(--primary-blue), var(--light-blue));
+    color: var(--white);
+    border: 2px solid var(--accent-gold);
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Player button specific styles */
+.player-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+}
+
+.player-image {
+   width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.player-name {
+    flex: 1;
+    text-align: left;
+}
+
+.player-button.selected .player-image {
+    border-color: var(--success-green);
+    opacity: 0.8;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, var(--light-blue), var(--primary-blue));
+}
+
+button:active {
+    transform: translateY(0);
+    animation: buttonPress 0.1s ease-out;
+}
+
+button:disabled {
+    background: linear-gradient(45deg, var(--dark-gray), #6c757d);
+    border-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--accent-gold);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: tableSlideIn 0.8s ease-out 0.5s forwards;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+th {
+    background: linear-gradient(45deg, var(--dark-blue), var(--primary-blue));
+    color: var(--accent-gold);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-gold);
+}
+
+/* Table header image */
+.table-header-image {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--accent-gold);
+    margin-right: 4px;
+    vertical-align: middle;
+    display: none;
+}
+
+/* Table player images */
+.table-player-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+td {
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+/* Left-align player name cells */
+td:first-child {
+    text-align: left;
+}
+
+tr:hover td {
+    background: rgba(21, 120, 208, 0.2);
+    transform: scale(1.01);
+}
+
+tr.updated {
+    animation: rowHighlight 0.8s ease-out;
+}
+
+tr.updated td {
+    background: linear-gradient(45deg, var(--success-green), #20c997);
+    color: var(--white);
+    font-weight: 700;
+}
+
+input, select {
+    padding: 12px 16px;
+    border: 2px solid var(--accent-gold);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    border-radius: 8px;
+    margin: 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+input:focus, select:focus {
+    border-color: var(--light-blue);
+    outline: none;
+    box-shadow: 0 0 15px rgba(74, 158, 255, 0.3);
+    transform: scale(1.02);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+div {
+    margin-bottom: 25px;
+}
+
+#rounds-input, #app {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#main-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+#score-table {
+    flex: 2;
+    min-width: 600px;
+}
+
+#standings {
+    flex: 1;
+    min-width: 300px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(45, 143, 45, 0.1));
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid var(--field-green);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    position: relative;
+    opacity: 0;
+    transform: translateX(50px);
+    animation: standingsSlide 0.8s ease-out 0.7s forwards;
+}
+
+#standings ol {
+    padding-left: 25px;
+    margin: 0;
+}
+
+#standings li {
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-gold);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Standings list items with images */
+.standings-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.standings-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+#standings li:hover {
+    background: rgba(21, 120, 208, 0.2);
+    transform: translateX(5px);
+    border-left-color: var(--light-blue);
+}
+
+#standings li.updated {
+    animation: standingUpdate 0.6s ease-out;
+    background: linear-gradient(45deg, var(--accent-gold), #fff8dc);
+    color: var(--dark-blue);
+    font-weight: 700;
+}
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    opacity: 0;
+    animation: buttonsRise 0.8s ease-out 0.3s forwards;
+}
+
+#buttons button {
+    animation: buttonBob 3s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+#draft-section {
+    background: linear-gradient(135deg, rgba(21, 120, 208, 0.2), rgba(13, 90, 167, 0.2));
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid var(--accent-gold);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    position: relative;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: draftEnter 0.8s ease-out forwards;
+}
+
+#draft-section::before {
+    content: '📋';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    opacity: 0.7;
+}
+
+/* Current chooser with image */
+#current-chooser {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.chooser-image {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-gold);
+}
+
+/* Draft pick items */
+.draft-pick-item, .final-order-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.draft-pick-image, .final-order-image {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--success-green);
+    flex-shrink: 0;
+}
+
+#assigned-picks li {
+    background: linear-gradient(45deg, rgba(40, 167, 69, 0.2), rgba(21, 120, 208, 0.2));
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 2px solid var(--success-green);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: pickSlideIn 0.5s ease-out forwards;
+    position: relative;
+}
+
+#assigned-picks li::before {
+    content: '🏆';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+}
+
+.error {
+    color: var(--error-red);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--error-red);
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: errorSlide 0.4s ease-out forwards;
+}
+
+#reset-btn {
+    background: linear-gradient(45deg, var(--warning-orange), #e85d04);
+}
+
+#reset-btn:hover {
+    background: linear-gradient(45deg, #e85d04, var(--warning-orange));
+}
+
+.champion-banner {
+    background: linear-gradient(45deg, var(--accent-gold), #fff8dc);
+    color: var(--dark-blue);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border: 2px solid var(--football-brown);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    gap: 16px;
+}
+.champion-banner img {
+    animation: spin 8s linear infinite;
+    height: 60px;
+  width: 60px;
+}
+
+/* Floating player icon */
+.floating-player-icon {
+    z-index: 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    opacity: 0.85;
+}
+
+/* Keyframe Animations */
+@keyframes fieldMove {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(52px);
+    }
+}
+
+@keyframes footballFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateY(-30px) rotate(180deg);
+        opacity: 0.6;
+    }
+}
+
+@keyframes logoEnter {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) rotateY(90deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotateY(0deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes titleEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonPress {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes tableSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rowHighlight {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes standingsSlide {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes standingUpdate {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes buttonsRise {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonBob {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes draftEnter {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pickSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes errorSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+    100% { transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    #main-content {
+        flex-direction: column;
+    }
+
+    #score-table, #standings {
+        flex: 1;
+        min-width: 100%;
+    }
+
+    #standings {
+        margin-top: 20px;
+    }
+
+    .logo {
+        font-size: 16px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+
+    #buttons {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    th, td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .player-image, .table-player-image, .standings-image, .draft-pick-image, .final-order-image, .chooser-image {
+        width: 16px;
+        height: 16px;
+    }
+
+    .table-header-image {
+       display: none;
+    }
+}
