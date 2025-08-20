@@ -355,10 +355,9 @@ function updateStandings(updatedPlayer) {
         img.alt = player.name;
         img.classList.add('standings-image');
 
-        // Create text content
-        const rankIcon = index === 0 ? '1️⃣' : index === 1 ? '2️⃣' : index === 2 ? '3️⃣' : '';
+        // Numbered standings (no rankIcon)
         let textSpan = document.createElement('span');
-        textSpan.textContent = `${rankIcon} ${player.name} - ${scores[player.name]?.total || 0} pts`;
+        textSpan.textContent = `${index + 1}. ${player.name} - ${scores[player.name]?.total || 0} pts`;
 
         li.appendChild(img);
         li.appendChild(textSpan);
