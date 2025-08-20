@@ -372,11 +372,27 @@ function updateStandings(updatedPlayer) {
 
 // Start draft pick selection
 function startDraft() {
+    // Instead of draft pick selection, just show standings in center
     playTouchdown(); // Championship complete sound
-    document.getElementById('draft-section').style.display = 'block';
-    document.getElementById('draft-controls').style.display = 'flex';
-    sortedPlayers = [...players].sort((a, b) => (scores[b]?.total || 0) - (scores[a]?.total || 0));
-    nextChooser();
+
+    // Hide draft section and race table
+    document.getElementById('draft-section').style.display = 'none';
+    document.getElementById('score-table').style.display = 'none';
+
+    // Center the standings
+    const standingsDiv = document.getElementById('standings');
+    if (standingsDiv) {
+        standingsDiv.style.margin = '0 auto';
+        standingsDiv.style.maxWidth = '500px';
+        standingsDiv.style.textAlign = 'center';
+        standingsDiv.style.display = 'block';
+    }
+
+    // Optionally, update the standings title to highlight final order
+    const standingsTitle = standingsDiv.querySelector('h2');
+    if (standingsTitle) {
+        standingsTitle.textContent = '🏆 DRAFT POSITION 🏆';
+    }
 }
 
 // Set up next chooser
