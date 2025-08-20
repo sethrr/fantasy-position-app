@@ -356,7 +356,7 @@ function updateStandings(updatedPlayer) {
         img.classList.add('standings-image');
 
         // Create text content
-        const rankIcon = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+        const rankIcon = index === 0 ? '1️⃣' : index === 1 ? '2️⃣' : index === 2 ? '3️⃣' : '';
         let textSpan = document.createElement('span');
         textSpan.textContent = `${rankIcon} ${player.name} - ${scores[player.name]?.total || 0} pts`;
 
@@ -533,6 +533,34 @@ function resetApp() {
     buildTable();
     updateStandings();
 }
+
+// Background music controls
+document.addEventListener('DOMContentLoaded', function () {
+    const music = document.getElementById('bg-music');
+    const btn = document.getElementById('music-toggle-btn');
+    let isPlaying = true;
+
+    // Ensure music plays on user interaction (browser autoplay policies)
+    function resumeMusic() {
+        if (music.paused) {
+            music.play();
+            isPlaying = true;
+            btn.textContent = '🔊 Pause Music';
+        }
+    }
+    document.addEventListener('click', resumeMusic, { once: true });
+
+    btn.addEventListener('click', function () {
+        if (isPlaying) {
+            music.pause();
+            btn.textContent = '🔈 Play Music';
+        } else {
+            music.play();
+            btn.textContent = '🔊 Pause Music';
+        }
+        isPlaying = !isPlaying;
+    });
+});
 
 // Initialize scores on page load
 initializeScores();

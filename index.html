@@ -32,7 +32,7 @@
         </div>
 
         <h2>⚡ Configure Championship Rounds ⚡</h2>
-        <input type="number" id="num-rounds" min="1" max="10" value="5" placeholder="Enter number of rounds (1-10)">
+        <input type="number" id="num-rounds" min="1" max="10" value="3" placeholder="Enter number of rounds (1-10)">
         <button onclick="startApp()">🏈 BEGIN DRAFT 🏈</button>
         <p id="rounds-error" class="error" style="display: none;">⚠️ Please enter a number between 1 and 10.</p>
     </div>
@@ -81,7 +81,11 @@
         </div>
     </div>
 
-   
+    <!-- Silly background music and mute/pause button -->
+    <audio id="bg-music" src="silly-music.mp3" loop autoplay></audio>
+    <button id="music-toggle-btn" style="position:fixed;top:10px;right:10px;z-index:999;font-size:18px;padding:8px 16px;">
+        🔊 Pause Music
+    </button>
 
     <script src="script.js"></script>
 </body>
