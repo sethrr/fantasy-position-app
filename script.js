@@ -256,6 +256,14 @@ function selectPlayer(name) {
         currentRace = [];
         raceNumber++;
         document.getElementById('race-num').textContent = raceNumber;
+        // Update standings after each race
+        sortedPlayers = [...players].sort((a, b) => (scores[b.name]?.total || 0) - (scores[a.name]?.total || 0));
+        // Ensure standings section is visible
+        const standingsDiv = document.getElementById('standings');
+        if (standingsDiv) {
+            standingsDiv.style.display = 'block';
+        }
+        updateStandings();
         if (raceNumber > maxRaces) {
             document.getElementById('race-section').style.display = 'none';
             startDraft();
@@ -342,7 +350,8 @@ function updateTable(updatedPlayer) {
 
 // Update live standings with animations
 function updateStandings(updatedPlayer) {
-    let sorted = [...players].sort((a, b) => (scores[b]?.total || 0) - (scores[a]?.total || 0));
+    // Sort by total points, highest first
+    let sorted = [...players].sort((a, b) => (scores[b.name]?.total || 0) - (scores[a.name]?.total || 0));
     const ol = document.getElementById('standings-list');
     ol.innerHTML = '';
     sorted.forEach((player, index) => {
@@ -355,7 +364,7 @@ function updateStandings(updatedPlayer) {
         img.alt = player.name;
         img.classList.add('standings-image');
 
-        // Numbered standings (no rankIcon)
+        // Numbered standings by points order
         let textSpan = document.createElement('span');
         textSpan.textContent = `${index + 1}. ${player.name} - ${scores[player.name]?.total || 0} pts`;
 
@@ -379,6 +388,8 @@ function startDraft() {
     document.getElementById('draft-section').style.display = 'none';
     document.getElementById('score-table').style.display = 'none';
 
+    // Update sortedPlayers for draft order before draft starts
+    sortedPlayers = [...players].sort((a, b) => (scores[b.name]?.total || 0) - (scores[a.name]?.total || 0));
     // Center the standings
     const standingsDiv = document.getElementById('standings');
     if (standingsDiv) {
@@ -386,12 +397,15 @@ function startDraft() {
         standingsDiv.style.maxWidth = '500px';
         standingsDiv.style.textAlign = 'center';
         standingsDiv.style.display = 'block';
-    }
 
-    // Optionally, update the standings title to highlight final order
-    const standingsTitle = standingsDiv.querySelector('h2');
-    if (standingsTitle) {
-        standingsTitle.textContent = '🏆 DRAFT POSITION 🏆';
+        // Update the standings title to highlight final order
+        const standingsTitle = standingsDiv.querySelector('h2');
+        if (standingsTitle) {
+            standingsTitle.textContent = '🏆 FINAL STANDINGS 🏆';
+        }
+
+        // Use updateStandings to refresh the standings list
+        updateStandings();
     }
 }
 
@@ -464,7 +478,9 @@ function showFinalOrder() {
     playTouchdown(); // Final celebration
     let order = [];
     for (let name in draftPicks) {
-        order.push({ name, pick: draftPicks[name] });
+        // Find player object for image
+        let playerObj = players.find(p => p.name === name);
+        order.push({ name, pick: draftPicks[name], image: playerObj ? playerObj.image : '' });
     }
     order.sort((a, b) => a.pick - b.pick);
 
@@ -485,7 +501,7 @@ function showFinalOrder() {
 
             // Create image for final order
             let img = document.createElement('img');
-            img.src = o.name.image;
+            img.src = o.image;
             img.alt = o.name;
             img.classList.add('final-order-image');
 
@@ -555,23 +571,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const btn = document.getElementById('music-toggle-btn');
     let isPlaying = true;
 
-    // Ensure music plays on user interaction (browser autoplay policies)
-    function resumeMusic() {
-        if (music.paused) {
-            music.play();
-            isPlaying = true;
-            btn.textContent = '🔊 Pause Music';
-        }
-    }
-    document.addEventListener('click', resumeMusic, { once: true });
+    // Remove autoplay logic; music only plays on button click
+
+    // Set initial button text
+    btn.textContent = 'Play Hype Music!';
 
     btn.addEventListener('click', function () {
         if (isPlaying) {
             music.pause();
-            btn.textContent = '🔈 Play Music';
+            btn.textContent = 'Play Hype Music!';
         } else {
             music.play();
-            btn.textContent = '🔊 Pause Music';
+            btn.textContent = 'Stop The Hype!';
         }
         isPlaying = !isPlaying;
     });
