@@ -175,6 +175,13 @@ function startApp() {
     }
 
     playStartGame();
+    // Start playing the music file
+    const music = document.getElementById('bg-music');
+    if (music && music.paused) {
+        music.play();
+        const btn = document.getElementById('music-toggle-btn');
+        if (btn) btn.textContent = 'Stop The Hype!';
+    }
     document.getElementById('rounds-error').style.display = 'none';
     document.getElementById('rounds-input').style.display = 'none';
     document.getElementById('app').style.display = 'block';
