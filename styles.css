@@ -1,10 +1,10 @@
 :root {
-    --primary-blue: #1578d0;
-    --secondary-blue: #0d5aa7;
+    --primary-green: #1b7a43;
+    --secondary-green: #0f4d2e;
     --accent-gold: #ffd700;
     --field-green: #2d8f2d;
-    --dark-blue: #0a4785;
-    --light-blue: #4a9eff;
+    --dark-green: #06281a;
+    --light-green: #4fae5e;
     --white: #ffffff;
     --light-gray: #f8f9fa;
     --dark-gray: #343a40;
@@ -20,7 +20,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--dark-blue) 100%);
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 50%, var(--dark-green) 100%);
     color: var(--white);
     margin: 0;
     padding: 20px;
@@ -62,7 +62,7 @@ body::before {
 
 
 .logo img {
-    max-width: 400px;
+    max-height: 400px;
 }
 
 
@@ -101,7 +101,7 @@ h3 {
 }
 
 button {
-    background: linear-gradient(45deg, var(--primary-blue), var(--light-blue));
+    background: linear-gradient(45deg, var(--primary-green), var(--light-green));
     color: var(--white);
     border: 2px solid var(--accent-gold);
     padding: 12px 24px;
@@ -124,12 +124,12 @@ button {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 50px;
+    min-height: 70px;
 }
 
 .player-image {
-   width: 44px;
-  height: 44px;
+   width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -163,7 +163,7 @@ button:hover::before {
 button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(45deg, var(--light-blue), var(--primary-blue));
+    background: linear-gradient(45deg, var(--light-green), var(--primary-green));
 }
 
 button:active {
@@ -202,7 +202,7 @@ th, td {
 }
 
 th {
-    background: linear-gradient(45deg, var(--dark-blue), var(--primary-blue));
+    background: linear-gradient(45deg, var(--dark-green), var(--primary-green));
     color: var(--accent-gold);
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 700;
@@ -236,8 +236,8 @@ th::after {
 
 /* Table player images */
 .table-player-image {
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 6px;
@@ -256,7 +256,7 @@ td:first-child {
 }
 
 tr:hover td {
-    background: rgba(21, 120, 208, 0.2);
+    background: rgba(27, 122, 67, 0.2);
     transform: scale(1.01);
 }
 
@@ -285,9 +285,9 @@ input, select {
 }
 
 input:focus, select:focus {
-    border-color: var(--light-blue);
+    border-color: var(--light-green);
     outline: none;
-    box-shadow: 0 0 15px rgba(74, 158, 255, 0.3);
+    box-shadow: 0 0 15px rgba(79, 174, 94, 0.3);
     transform: scale(1.02);
 }
 
@@ -357,23 +357,23 @@ div {
 }
 
 .standings-image {
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
 }
 
 #standings li:hover {
-    background: rgba(21, 120, 208, 0.2);
+    background: rgba(27, 122, 67, 0.2);
     transform: translateX(5px);
-    border-left-color: var(--light-blue);
+    border-left-color: var(--light-green);
 }
 
 #standings li.updated {
     animation: standingUpdate 0.6s ease-out;
     background: linear-gradient(45deg, var(--accent-gold), #fff8dc);
-    color: var(--dark-blue);
+    color: var(--dark-green);
     font-weight: 700;
 }
 
@@ -391,7 +391,7 @@ div {
 }
 
 #draft-section {
-    background: linear-gradient(135deg, rgba(21, 120, 208, 0.2), rgba(13, 90, 167, 0.2));
+    background: linear-gradient(135deg, rgba(27, 122, 67, 0.2), rgba(15, 77, 46, 0.2));
     padding: 30px;
     border-radius: 15px;
     border: 2px solid var(--accent-gold);
@@ -421,8 +421,8 @@ div {
 }
 
 .chooser-image {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--accent-gold);
@@ -436,8 +436,8 @@ div {
 }
 
 .draft-pick-image, .final-order-image {
-    width: 18px;
-    height: 18px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid var(--success-green);
@@ -445,7 +445,7 @@ div {
 }
 
 #assigned-picks li {
-    background: linear-gradient(45deg, rgba(40, 167, 69, 0.2), rgba(21, 120, 208, 0.2));
+    background: linear-gradient(45deg, rgba(40, 167, 69, 0.2), rgba(27, 122, 67, 0.2));
     padding: 15px 20px;
     margin-bottom: 12px;
     border-radius: 10px;
@@ -491,7 +491,7 @@ div {
 
 .champion-banner {
     background: linear-gradient(45deg, var(--accent-gold), #fff8dc);
-    color: var(--dark-blue);
+    color: var(--dark-green);
     padding: 15px;
     border-radius: 10px;
     text-align: center;
@@ -506,8 +506,8 @@ div {
 }
 .champion-banner img {
     animation: spin 8s linear infinite;
-    height: 60px;
-  width: 60px;
+    height: 84px;
+  width: 84px;
 }
 
 /* Floating player icon */
@@ -744,8 +744,8 @@ div {
     }
 
     .player-image, .table-player-image, .standings-image, .draft-pick-image, .final-order-image, .chooser-image {
-        width: 16px;
-        height: 16px;
+        width: 26px;
+        height: 26px;
     }
 
     .table-header-image {

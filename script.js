@@ -43,18 +43,18 @@ function loadFileData(filename) {
 // Draft Order Tool Application
 // Update players array to include name and image
 const players = [
-    { name: "Ethan", image: "Ethan.jpeg" },
-    { name: "Brian", image: "Brian.jpeg" },
-    { name: "Roy", image: "Roy.jpeg" },
-    { name: "Sam", image: "Sam.jpeg" },
-    { name: "Glenn", image: "Glenn.jpeg" },
-    { name: "Russell", image: "Russell.jpeg" },
-    { name: "Amy", image: "Amy.jpeg" },
-    { name: "Marcia", image: "Marcia.jpeg" },
-    { name: "Jake", image: "Jake.jpeg" },
-    { name: "Lisa", image: "Lisa.jpeg" },
-    { name: "Seth", image: "Seth.jpeg" },
-    { name: "Ashley", image: "Ashley.jpeg" }
+    { name: "Adam", image: "images/adam.jpg" },
+    { name: "Alex", image: "images/alex.jpeg" },
+    { name: "Daniels", image: "images/daniels.jpg" },
+    { name: "Defargges", image: "images/defargges.jpeg" },
+    { name: "Eric", image: "images/eric.jpg" },
+    { name: "GR", image: "images/GR.jpg" },
+    { name: "Gio", image: "images/gio.png" },
+    { name: "Justin", image: "images/justin.jpg" },
+    { name: "Seth", image: "images/seth.png" },
+    { name: "Shane", image: "images/shane.jpg" },
+    { name: "Yared", image: "images/yared.jpeg" },
+    { name: "Destin", image: "images/destin.jpg" }
 ];
 
 let scores = {};
@@ -314,7 +314,7 @@ function resetButtons() {
 // Build initial scores table
 function buildTable() {
     const thead = document.getElementById('table-head');
-    let headerRow = '<tr><th><img src="/Glenn.png" alt="Player" class="table-header-image"> Player</th>';
+    let headerRow = '<tr><th><img src="player-icons.png" alt="Player" class="table-header-image"> Player</th>';
     for (let i = 1; i <= maxRaces; i++) {
         headerRow += `<th>🏃‍♂️‍➡️ Round ${i}</th>`;
     }
