@@ -578,6 +578,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const btn = document.getElementById('music-toggle-btn');
     let isPlaying = true;
 
+    music.volume = 0.5;
+
     // Remove autoplay logic; music only plays on button click
 
     // Set initial button text
