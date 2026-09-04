@@ -597,6 +597,54 @@ function resetApp() {
     syncGameState();
 }
 
+// Wipe everything and go all the way back to the rounds entry screen
+function startOverApp() {
+    if (!confirm('Start over? This wipes all scores and draft picks for everyone watching.')) return;
+
+    playWhistle();
+    scores = {};
+    currentRace = [];
+    raceNumber = 1;
+    sortedPlayers = [];
+    currentChooserIndex = 0;
+    availablePicks = Array.from({ length: 12 }, (_, i) => i + 1);
+    draftPicks = {};
+    gamePhase = 'setup';
+
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('rounds-input').style.display = 'block';
+    document.getElementById('rounds-error').style.display = 'none';
+    document.getElementById('race-section').style.display = 'block';
+    document.getElementById('score-table').style.display = 'block';
+    document.getElementById('draft-section').style.display = 'none';
+    document.getElementById('race-num').textContent = '1';
+
+    const assignedPicks = document.getElementById('assigned-picks');
+    if (assignedPicks) assignedPicks.innerHTML = '';
+    document.getElementById('draft-error').style.display = 'none';
+    ['current-chooser', 'draft-controls', 'assigned-picks-title', 'dps', 'pcd'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = '';
+    });
+
+    // Undo the final-standings styling applied by startDraft()
+    const standingsDiv = document.getElementById('standings');
+    if (standingsDiv) {
+        standingsDiv.style.margin = '';
+        standingsDiv.style.maxWidth = '';
+        standingsDiv.style.textAlign = '';
+        const standingsTitle = standingsDiv.querySelector('h2');
+        if (standingsTitle) standingsTitle.textContent = '🏅 DRAFT POSITION';
+    }
+
+    // Remove the extra floating footballs spawned during the game
+    document.querySelectorAll('.football').forEach((el, i) => {
+        if (i >= 5) el.remove();
+    });
+
+    syncGameState();
+}
+
 // Background music controls
 document.addEventListener('DOMContentLoaded', function () {
     const music = document.getElementById('bg-music');
