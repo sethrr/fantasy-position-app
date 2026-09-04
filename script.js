@@ -51,7 +51,7 @@ const players = [
     { name: "GR", image: "images/GR.jpg" },
     { name: "Gio", image: "images/gio.png" },
     { name: "Justin", image: "images/justin.jpg" },
-    { name: "Seth", image: "images/seth.png" },
+    { name: "Seth", image: "images/seth.jpeg" },
     { name: "Shane", image: "images/shane.jpg" },
     { name: "Yared", image: "images/yared.jpeg" },
     { name: "Destin", image: "images/destin.jpg" }
@@ -65,6 +65,29 @@ let sortedPlayers = [];
 let currentChooserIndex = 0;
 let availablePicks = Array.from({ length: 12 }, (_, i) => i + 1);
 let draftPicks = {};
+let gamePhase = 'setup';
+
+// Push current game state to Firestore so watch.html can mirror it live.
+// No-ops silently if firebase-config.js hasn't been filled in yet.
+function syncGameState() {
+    if (typeof gameDocRef === 'undefined' || !gameDocRef) return;
+    try {
+        gameDocRef.set({
+            phase: gamePhase,
+            scores,
+            currentRace,
+            raceNumber,
+            maxRaces,
+            sortedPlayerNames: sortedPlayers.map(p => p.name),
+            currentChooserIndex,
+            availablePicks,
+            draftPicks,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }).catch(err => console.error('Live sync failed:', err));
+    } catch (e) {
+        console.error('Live sync failed:', e);
+    }
+}
 
 // Sound effects using Web Audio API
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -175,13 +198,6 @@ function startApp() {
     }
 
     playStartGame();
-    // Start playing the music file
-    const music = document.getElementById('bg-music');
-    if (music && music.paused) {
-        music.play();
-        const btn = document.getElementById('music-toggle-btn');
-        if (btn) btn.textContent = 'Stop The Hype!';
-    }
     document.getElementById('rounds-error').style.display = 'none';
     document.getElementById('rounds-input').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -191,6 +207,8 @@ function startApp() {
     buildTable();
     updateStandings();
 
+    gamePhase = 'racing';
+    syncGameState();
 }
 
 // Build player selection buttons
@@ -278,6 +296,8 @@ function selectPlayer(name) {
             setTimeout(() => resetButtons(), 1500);
         }
     }
+
+    syncGameState();
 }
 
 // Get place icon and text
@@ -388,6 +408,7 @@ function updateStandings(updatedPlayer) {
 
 // Start draft pick selection
 function startDraft() {
+    gamePhase = 'draft';
     // Instead of draft pick selection, just show standings in center
     playTouchdown(); // Championship complete sound
 
@@ -478,10 +499,12 @@ function confirmPick() {
     }
     currentChooserIndex++;
     nextChooser();
+    syncGameState();
 }
 
 // Show final draft order sorted by pick
 function showFinalOrder() {
+    gamePhase = 'final';
     playTouchdown(); // Final celebration
     let order = [];
     for (let name in draftPicks) {
@@ -549,6 +572,7 @@ function resetApp() {
     availablePicks = Array.from({ length: 12 }, (_, i) => i + 1);
     draftPicks = {};
     maxRaces = parseInt(document.getElementById('num-rounds').value) || 5;
+    gamePhase = 'racing';
 
     document.getElementById('race-section').style.display = 'block';
     document.getElementById('draft-section').style.display = 'none';
@@ -570,17 +594,18 @@ function resetApp() {
     buildButtons();
     buildTable();
     updateStandings();
+    syncGameState();
 }
 
 // Background music controls
 document.addEventListener('DOMContentLoaded', function () {
     const music = document.getElementById('bg-music');
     const btn = document.getElementById('music-toggle-btn');
-    let isPlaying = true;
+    let isPlaying = false;
 
-    music.volume = 0.15;
+    music.volume = 0.1;
 
-    // Remove autoplay logic; music only plays on button click
+    // Music only plays once the user clicks the button
 
     // Set initial button text
     btn.textContent = 'Play Hype Music!';

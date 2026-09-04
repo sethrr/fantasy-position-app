@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏈 Adage TechMo Bowl 2025 Draft Order — Watch Live 🏈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="football" style="top: 10%; left: 15%; animation-delay: 0s;">🏈</div>
+    <div class="football" style="top: 25%; left: 85%; animation-delay: 2s;">🏈</div>
+    <div class="football" style="top: 60%; left: 10%; animation-delay: 4s;">🏈</div>
+    <div class="football" style="top: 80%; left: 75%; animation-delay: 6s;">🏈</div>
+    <div class="football" style="top: 35%; left: 90%; animation-delay: 1s;">🏈</div>
+
+    <div class="logo-container">
+        <div class="logo">
+            <img src="logo.png" />
+        </div>
+    </div>
+
+    <h1>🏆 Draft Order Dash 2026 — Watching Live 🏆</h1>
+
+    <div id="waiting" style="text-align:center; font-size: 20px; font-weight: 700;">
+        ⏳ Waiting for the host to start the draft...
+    </div>
+
+    <div id="watch-app" style="display:none;">
+        <div id="race-status" style="text-align:center; margin-bottom: 20px;"></div>
+
+        <div id="main-content">
+            <div id="score-table">
+                <h2>📊 RACE SCOREBOARD</h2>
+                <div id="table-container">
+                    <table>
+                        <thead id="table-head"></thead>
+                        <tbody id="score-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="standings">
+                <h2 id="standings-title">🏅 DRAFT POSITION</h2>
+                <ol id="standings-list"></ol>
+            </div>
+        </div>
+
+        <div id="draft-section" style="display:none;">
+            <p id="current-chooser"></p>
+            <h3 id="assigned-picks-title">📋 DRAFT SELECTIONS</h3>
+            <ul id="assigned-picks"></ul>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="watch.js"></script>
+</body>
+</html>

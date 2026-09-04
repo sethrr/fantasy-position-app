@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏈 Adage TechMo Bowl 2025 Draft Order 🏈</title>
+    <script>
+        // Host-only page: anyone without the secret key gets bounced to the read-only watch page.
+        (function () {
+            var HOST_KEY = '557dc681f60d360b66aafd7ba7cd1f1e';
+            var params = new URLSearchParams(window.location.search);
+            if (params.get('key') !== HOST_KEY) {
+                window.location.replace('watch.html');
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -82,11 +92,17 @@
     </div>
 
     <!-- Silly background music and mute/pause button -->
-    <audio id="bg-music" src="fox.mp3" loop autoplay></audio>
+    <audio id="bg-music" src="fox.mp3" loop></audio>
     <button id="music-toggle-btn" style="position:fixed;top:10px;right:10px;z-index:999;font-size:18px;padding:8px 16px;">
         🔊 Pause Music
     </button>
+    <a href="watch.html" target="_blank" style="position:fixed;top:10px;left:10px;z-index:999;font-size:14px;padding:8px 16px;background:linear-gradient(45deg, var(--primary-green), var(--light-green));color:var(--white);border:2px solid var(--accent-gold);border-radius:8px;text-decoration:none;font-weight:700;">
+        📺 Share Watch Link
+    </a>
 
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
