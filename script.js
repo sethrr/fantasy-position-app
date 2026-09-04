@@ -409,11 +409,9 @@ function updateStandings(updatedPlayer) {
 // Start draft pick selection
 function startDraft() {
     gamePhase = 'draft';
-    // Instead of draft pick selection, just show standings in center
     playTouchdown(); // Championship complete sound
 
-    // Hide draft section and race table
-    document.getElementById('draft-section').style.display = 'none';
+    // Race table no longer needed; draft controls take over
     document.getElementById('score-table').style.display = 'none';
 
     // Update sortedPlayers for draft order before draft starts
@@ -435,6 +433,10 @@ function startDraft() {
         // Use updateStandings to refresh the standings list
         updateStandings();
     }
+
+    // Show draft controls and let the top scorer pick first
+    document.getElementById('draft-section').style.display = 'block';
+    nextChooser();
 }
 
 // Set up next chooser
@@ -576,7 +578,18 @@ function resetApp() {
 
     document.getElementById('race-section').style.display = 'block';
     document.getElementById('draft-section').style.display = 'none';
+    document.getElementById('score-table').style.display = 'block';
     document.getElementById('race-num').textContent = '1';
+
+    // Undo the final-standings styling applied by startDraft()
+    const standingsDiv = document.getElementById('standings');
+    if (standingsDiv) {
+        standingsDiv.style.margin = '';
+        standingsDiv.style.maxWidth = '';
+        standingsDiv.style.textAlign = '';
+        const standingsTitle = standingsDiv.querySelector('h2');
+        if (standingsTitle) standingsTitle.textContent = '🏅 DRAFT POSITION';
+    }
 
     // Reset all elements
     const elements = ['draft-error', 'current-chooser', 'draft-controls', 'assigned-picks', 'assigned-picks-title', 'dps', 'pcd'];
