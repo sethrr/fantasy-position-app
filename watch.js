@@ -87,11 +87,46 @@ function renderRaceStatus(data) {
     }
 }
 
+// Render all 12 draft slots in pick order (1-12), filling in names as they're chosen.
+function renderPicksList(draftPicks, isFinal) {
+    const ul = document.getElementById('assigned-picks');
+    ul.innerHTML = '';
+
+    const nameByPick = {};
+    Object.keys(draftPicks).forEach(name => { nameByPick[draftPicks[name]] = name; });
+
+    for (let pick = 1; pick <= 12; pick++) {
+        const name = nameByPick[pick];
+        const player = name ? playerByName(name) : null;
+
+        let li = document.createElement('li');
+        li.classList.add(isFinal ? 'final-order-item' : 'draft-pick-item');
+        if (!name) li.style.opacity = '0.4';
+
+        let img = document.createElement('img');
+        img.src = player ? player.image : '';
+        img.alt = name || '';
+        img.classList.add(isFinal ? 'final-order-image' : 'draft-pick-image');
+        if (!name) img.style.visibility = 'hidden';
+
+        const rankIcon = isFinal ? (pick === 1 ? '👑' : pick === 2 ? '🥈' : pick === 3 ? '🥉' : '🏈') : '🏈';
+        let textSpan = document.createElement('span');
+        textSpan.textContent = name ? `${rankIcon} Pick #${pick}: ${name}` : `Pick #${pick}: — waiting —`;
+        if (isFinal) {
+            li.style.fontSize = '16px';
+            li.style.fontWeight = '700';
+        }
+
+        li.appendChild(img);
+        li.appendChild(textSpan);
+        ul.appendChild(li);
+    }
+}
+
 function renderDraft(data) {
     const section = document.getElementById('draft-section');
     const chooserText = document.getElementById('current-chooser');
     const title = document.getElementById('assigned-picks-title');
-    const ul = document.getElementById('assigned-picks');
 
     if (data.phase !== 'draft' && data.phase !== 'final') {
         section.style.display = 'none';
@@ -111,48 +146,12 @@ function renderDraft(data) {
             : '';
         title.textContent = '📋 DRAFT SELECTIONS';
         title.style.display = 'block';
-
-        ul.innerHTML = '';
-        Object.keys(draftPicks).forEach(name => {
-            const player = playerByName(name);
-            let li = document.createElement('li');
-            li.classList.add('draft-pick-item');
-            let img = document.createElement('img');
-            img.src = player ? player.image : '';
-            img.alt = name;
-            img.classList.add('draft-pick-image');
-            let textSpan = document.createElement('span');
-            textSpan.textContent = `🏈 ${name}: Draft Pick #${draftPicks[name]}`;
-            li.appendChild(img);
-            li.appendChild(textSpan);
-            ul.appendChild(li);
-        });
+        renderPicksList(draftPicks, false);
     } else {
         chooserText.style.display = 'none';
         title.textContent = '🏆 FINAL DRAFT ORDER 🏆';
         title.style.display = 'block';
-
-        let order = Object.keys(draftPicks).map(name => ({
-            name,
-            pick: draftPicks[name],
-            image: playerByName(name)?.image || ''
-        })).sort((a, b) => a.pick - b.pick);
-
-        ul.innerHTML = '';
-        order.forEach((o, index) => {
-            let li = document.createElement('li');
-            li.classList.add('final-order-item');
-            let img = document.createElement('img');
-            img.src = o.image;
-            img.alt = o.name;
-            img.classList.add('final-order-image');
-            const rankIcon = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏈';
-            let textSpan = document.createElement('span');
-            textSpan.textContent = `${rankIcon} Pick #${o.pick}: ${o.name}`;
-            li.appendChild(img);
-            li.appendChild(textSpan);
-            ul.appendChild(li);
-        });
+        renderPicksList(draftPicks, true);
     }
 }
 

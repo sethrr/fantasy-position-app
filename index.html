@@ -43,6 +43,12 @@
 
         <h2>⚡HOW MANY DASHES DO YOU WANNA RUN? ⚡</h2>
         <input type="number" id="num-rounds" min="1" max="10" value="3" placeholder="Enter number of rounds (1-10)">
+        <p style="margin: 10px 0;">
+            <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:600;">
+                <input type="checkbox" id="manual-picking-toggle" checked style="width:20px; height:20px; margin:0;">
+                🎯 Let players manually pick draft position
+            </label>
+        </p>
         <button onclick="startApp()">🏃‍➡️ COMMENCE THE DASHES 🏃‍➡️</button>
         <p id="rounds-error" class="error" style="display: none;">⚠️ Please enter a number between 1 and 10.</p>
     </div>

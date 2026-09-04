@@ -295,6 +295,12 @@ input::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
+/* Option list uses its own opaque background per browser default, so style it explicitly */
+select option {
+    background: var(--dark-green);
+    color: var(--white);
+}
+
 div {
     margin-bottom: 25px;
 }

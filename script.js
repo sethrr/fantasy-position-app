@@ -66,6 +66,7 @@ let currentChooserIndex = 0;
 let availablePicks = Array.from({ length: 12 }, (_, i) => i + 1);
 let draftPicks = {};
 let gamePhase = 'setup';
+let manualPicking = true;
 
 // Push current game state to Firestore so watch.html can mirror it live.
 // No-ops silently if firebase-config.js hasn't been filled in yet.
@@ -191,6 +192,7 @@ function startApp() {
     }
 
     maxRaces = parseInt(document.getElementById('num-rounds').value) || 5;
+    manualPicking = document.getElementById('manual-picking-toggle')?.checked ?? true;
     if (maxRaces < 1 || maxRaces > 10) {
         document.getElementById('rounds-error').style.display = 'block';
         playSound(300, 0.3, 'sawtooth'); // Error sound
@@ -434,9 +436,21 @@ function startDraft() {
         updateStandings();
     }
 
-    // Show draft controls and let the top scorer pick first
-    document.getElementById('draft-section').style.display = 'block';
-    nextChooser();
+    if (manualPicking) {
+        // Show draft controls and let the top scorer pick first
+        document.getElementById('draft-section').style.display = 'block';
+        renderDraftPicksList(false);
+        nextChooser();
+    } else {
+        // Skip manual picking: draft position = standings order
+        sortedPlayers.forEach((player, index) => {
+            draftPicks[player.name] = index + 1;
+        });
+        availablePicks = [];
+        currentChooserIndex = 12;
+        document.getElementById('draft-section').style.display = 'block';
+        showFinalOrder();
+    }
 }
 
 // Set up next chooser
@@ -480,45 +494,21 @@ function confirmPick() {
     draftPicks[chooser.name] = pick;
     availablePicks = availablePicks.filter(p => p !== pick);
 
-    const ul = document.getElementById('assigned-picks');
-    if (ul) {
-        let li = document.createElement('li');
-        li.classList.add('draft-pick-item');
+    renderDraftPicksList(false);
 
-        // Create image for draft picks
-        let img = document.createElement('img');
-        img.src = chooser.image;
-        img.alt = chooser.name;
-        img.classList.add('draft-pick-image');
-
-        let textSpan = document.createElement('span');
-        textSpan.textContent = `🏈 ${chooser.name}: Draft Pick #${pick}`;
-
-        li.appendChild(img);
-        li.appendChild(textSpan);
-        li.style.animationDelay = (currentChooserIndex * 0.1) + 's';
-        ul.appendChild(li);
-    }
     currentChooserIndex++;
     nextChooser();
     syncGameState();
 }
 
-// Show final draft order sorted by pick
-function showFinalOrder() {
-    gamePhase = 'final';
-    playTouchdown(); // Final celebration
-    let order = [];
-    for (let name in draftPicks) {
-        // Find player object for image
-        let playerObj = players.find(p => p.name === name);
-        order.push({ name, pick: draftPicks[name], image: playerObj ? playerObj.image : '' });
-    }
-    order.sort((a, b) => a.pick - b.pick);
-
+// Render all 12 draft slots in pick order (1-12), filling in names as they're chosen.
+// Used both mid-draft (live, unpicked slots shown as TBD) and for the final order screen.
+function renderDraftPicksList(isFinal) {
     const ul = document.getElementById('assigned-picks');
-    if (ul) {
-        ul.innerHTML = '';
+    if (!ul) return;
+    ul.innerHTML = '';
+
+    if (isFinal) {
         let h3 = document.createElement('h3');
         h3.textContent = '🏆 FINAL DRAFT ORDER 🏆';
         h3.style.textAlign = 'center';
@@ -526,29 +516,46 @@ function showFinalOrder() {
         h3.style.fontSize = '24px';
         h3.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
         ul.appendChild(h3);
+    }
 
-        order.forEach((o, index) => {
-            let li = document.createElement('li');
-            li.classList.add('final-order-item');
+    const nameByPick = {};
+    Object.keys(draftPicks).forEach(name => { nameByPick[draftPicks[name]] = name; });
 
-            // Create image for final order
-            let img = document.createElement('img');
-            img.src = o.image;
-            img.alt = o.name;
-            img.classList.add('final-order-image');
+    for (let pick = 1; pick <= 12; pick++) {
+        const name = nameByPick[pick];
+        const playerObj = name ? players.find(p => p.name === name) : null;
 
-            const rankIcon = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏈';
-            let textSpan = document.createElement('span');
-            textSpan.textContent = `${rankIcon} Pick #${o.pick}: ${o.name}`;
+        let li = document.createElement('li');
+        li.classList.add(isFinal ? 'final-order-item' : 'draft-pick-item');
+        if (!name) li.style.opacity = '0.4';
 
-            li.appendChild(img);
-            li.appendChild(textSpan);
-            li.style.animationDelay = (index * 0.1) + 's';
+        let img = document.createElement('img');
+        img.src = playerObj ? playerObj.image : '';
+        img.alt = name || '';
+        img.classList.add(isFinal ? 'final-order-image' : 'draft-pick-image');
+        if (!name) img.style.visibility = 'hidden';
+
+        const rankIcon = isFinal ? (pick === 1 ? '👑' : pick === 2 ? '🥈' : pick === 3 ? '🥉' : '🏈') : '🏈';
+        let textSpan = document.createElement('span');
+        textSpan.textContent = name ? `${rankIcon} Pick #${pick}: ${name}` : `Pick #${pick}: — waiting —`;
+
+        li.appendChild(img);
+        li.appendChild(textSpan);
+        li.style.animationDelay = ((pick - 1) * 0.1) + 's';
+        if (isFinal) {
             li.style.fontSize = '16px';
             li.style.fontWeight = '700';
-            ul.appendChild(li);
-        });
+        }
+        ul.appendChild(li);
     }
+}
+
+// Show final draft order sorted by pick
+function showFinalOrder() {
+    gamePhase = 'final';
+    playTouchdown(); // Final celebration
+
+    renderDraftPicksList(true);
 
     // Hide draft controls
     const chooser = document.getElementById('current-chooser');
